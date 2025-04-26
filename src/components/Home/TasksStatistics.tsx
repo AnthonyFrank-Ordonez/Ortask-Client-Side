@@ -1,0 +1,23 @@
+const TasksStatistics = () => {
+	return (
+		<div className='bg-tertiary/20 p-6 rounded-lg shadow border-2 border-gray-400/10 lg:h-45 relative ml-3'>
+			<h1 className='text-xl font-bold text-primary mb-3'>Task Analytics</h1>
+			<div className='flex flex-col md:flex-row md:space-x-4 space-y-5 md:space-y-0 md:items-center'>
+				<div className='flex-1 bg-primary-400 p-4 rounded text-tertiary'>
+					<p className='text-lg font-medium'>Total Tasks</p>
+					<p className='text-2xl font-bold'>30</p>
+				</div>
+				<div className='flex-1 bg-primary-400 p-4 rounded text-tertiary'>
+					<p className='text-lg font-medium'>Tasks Completed</p>
+					<p className='text-2xl font-bold'>10</p>
+				</div>
+				<div className='flex-1 bg-primary-400 p-4 rounded text-tertiary'>
+					<p className='text-lg font-medium'>Tasks Inprogress</p>
+					<p className='text-2xl font-bold'>20</p>
+				</div>
+			</div>
+		</div>
+	);
+};
+
+export default TasksStatistics;
