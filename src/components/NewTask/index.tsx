@@ -4,13 +4,18 @@ import TaskInformation from './TaskInformation';
 import TasksResponse from './TasksResponse';
 import ReviewInformation from './ReviewInformation';
 import Stepper from './Stepper';
+import { useCreateTask } from '@/hooks/tasks';
+import { useToastError, useToastSuccess } from '@/hooks/notification';
+import { AxiosError } from 'axios';
 
 const priorityData: Priority[] = ['Medium', 'Highest', 'Critical'];
 const statusData: Status[] = ['To Do', 'In Progress', 'Completed'];
 
 const NewTask = () => {
+	const showSuccessMessage = useToastSuccess();
+	const showErrorMessage = useToastError();
 	const [currentStep, setCurrentStep] = useState(1);
-	const [isSubmitted, setIsSubmiited] = useState(false);
+	const { mutateAsync: createNewTask } = useCreateTask();
 	const [formData, setFormData] = useState<TaskDataType>({
 		taskName: '',
 		dueDate: new Date(),
@@ -26,14 +31,29 @@ const NewTask = () => {
 		setCurrentStep(currentStep - 1);
 	};
 
-	const handleSubmit = (event: React.SyntheticEvent) => {
+	const handleSubmit = async (event: React.SyntheticEvent) => {
 		event.preventDefault();
 
-		setIsSubmiited(true);
-		setCurrentStep(3);
-
-		console.log('🚀 ~ NewTask ~ isSubmitted:', isSubmitted);
-		console.log('🚀 ~ NewTask ~ formData:', formData);
+		await createNewTask(formData, {
+			onSuccess: (data) => {
+				if ('taskName' in data) {
+					setCurrentStep(3);
+					showSuccessMessage(`Task ${data.taskName} successfully created!`);
+				}
+			},
+			onError: (error: unknown) => {
+				if (error instanceof AxiosError) {
+					if (Array.isArray(error.response?.data.error)) {
+						const errorArrayMessage = error.response?.data.error[0].message;
+						showErrorMessage(errorArrayMessage);
+					} else {
+						const errorMesage = error.response?.data.error.message;
+						showErrorMessage(errorMesage);
+					}
+				}
+				setCurrentStep(2);
+			},
+		});
 	};
 
 	// On change for inputs
@@ -76,7 +96,7 @@ const NewTask = () => {
 
 			setFormData((prevData) => ({
 				...prevData,
-				dueDate: localDate,
+				dueDate: date,
 			}));
 		}
 	};
@@ -119,7 +139,6 @@ const NewTask = () => {
 					<TasksResponse
 						setCurrentStep={setCurrentStep}
 						setFormData={setFormData}
-						setIsSubmiited={setIsSubmiited}
 						priorityData={priorityData}
 						statusData={statusData}
 					/>

@@ -1,8 +1,4 @@
-export enum Role {
-	Employee = 'employee',
-	Lead = 'lead',
-	Manager = 'manager',
-}
+export type Role = 'Employee' | 'Lead' | 'Manager';
 
 export type Priority = 'Medium' | 'Highest' | 'Critical';
 export type Status = 'In Progress' | 'To Do' | 'Completed';
@@ -18,8 +14,10 @@ export interface AuthContextType {
 
 export interface StoreState {
 	user: User | null;
+	userLogout: boolean;
 	isAuthenticated: boolean;
 	signingIn: boolean;
+	currentPage: string;
 }
 
 export interface TaskAnalyticsData {
@@ -34,26 +32,10 @@ export interface TaskDataType {
 	status: Status;
 }
 
-export interface Roles {
-	id: number;
-	name: string;
-	value: string;
-	tag: string;
-}
-
 export interface BaseSelectInput {
 	id: number;
 	tag: string;
 }
-
-// export interface Priority extends BaseSelectInput {
-// 	priorityName: string;
-// }
-
-// export interface Status extends BaseSelectInput {
-// 	statusName: string;
-// 	value: string;
-// }
 
 export interface Credentials {
 	email: string;
@@ -75,6 +57,10 @@ export interface LoggedUser {
 	user: User;
 }
 
+export interface CurrentPage {
+	page: string;
+}
+
 export interface AuthenticatedUser {
 	isAuthenticated: boolean;
 	user: User | null;
@@ -89,6 +75,15 @@ export interface RegisterForm {
 }
 
 export type RegisterUser = Omit<RegisterForm, 'confirmPassword'>;
+
+export interface NewTask extends TaskDataType {
+	id: string;
+	slug: string;
+	user: {
+		username: string;
+		email: string;
+	};
+}
 
 export interface RegisterResponse {
 	message: string;

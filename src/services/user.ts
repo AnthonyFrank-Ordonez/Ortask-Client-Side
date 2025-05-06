@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { API_URLS } from '../utils';
 import {
 	MessageResponse,
@@ -6,10 +5,10 @@ import {
 	RegisterUser,
 	Resend,
 } from '../types';
-axios.defaults.withCredentials = true;
+import axiosInstance from './axiosInstance';
 
 const registerUser = async (newUser: RegisterUser) => {
-	const response = await axios.post<RegisterResponse>(
+	const response = await axiosInstance.post<RegisterResponse>(
 		API_URLS.REGISTER,
 		newUser
 	);
@@ -17,7 +16,7 @@ const registerUser = async (newUser: RegisterUser) => {
 };
 
 const resendUserVerification = async (email: Resend) => {
-	const response = await axios.post<MessageResponse>(
+	const response = await axiosInstance.post<MessageResponse>(
 		`${API_URLS.USERS}/resend-verification`,
 		email
 	);

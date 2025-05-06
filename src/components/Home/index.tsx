@@ -11,13 +11,11 @@ const Home = () => {
 	const { user } = useSelector((state: RootState) => state.session);
 
 	useEffect(() => {
-		const storeExpirePageToken = localStorage.getItem('verificationEndTime');
 		const storeverifyPageToken = localStorage.getItem(
 			'verificationAccountEndTime'
 		);
 
-		if (storeExpirePageToken || storeverifyPageToken) {
-			localStorage.removeItem('verificationEndTime');
+		if (storeverifyPageToken) {
 			localStorage.removeItem('verificationAccountEndTime');
 		}
 	}, []);

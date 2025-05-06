@@ -1,10 +1,12 @@
 import { AxiosError } from 'axios';
 import { useToastError, useToastSuccess } from '@/hooks/notification';
 import { useResendVerification } from '../hooks/users';
-import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { useNavigate } from 'react-router-dom';
+import { useLogout } from '@/hooks/auth';
+import { resetAuthStatus } from '@/store/reducers/sessionReducer';
 
 const VerifyAccount = () => {
 	const { user, isAuthenticated } = useSelector(
@@ -13,15 +15,20 @@ const VerifyAccount = () => {
 	const showSuccessMessage = useToastSuccess();
 	const showErrorMessage = useToastError();
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const { mutateAsync: logoutuser } = useLogout();
 	const [canVerify, setCanVerify] = useState(true);
 	const [timeRemaining, setTimeRemaining] = useState(0);
 	const { mutateAsync: resendVerification, isPending: sendingVerification } =
 		useResendVerification();
 
 	useEffect(() => {
-		if (!isAuthenticated) navigate('/login');
-		else if (isAuthenticated && user?.isVerified) navigate('/');
-	}, [isAuthenticated, navigate, user]);
+		if (!isAuthenticated) {
+			navigate('/login', { replace: true });
+		} else if (user?.isVerified) {
+			navigate('/', { replace: true });
+		}
+	}, [isAuthenticated, user, navigate]);
 
 	// TIMER FOR INITIAL LOAD
 	useEffect(() => {
@@ -100,6 +107,12 @@ const VerifyAccount = () => {
 		return `${mins.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
 	};
 
+	const handleLogout = async () => {
+		await logoutuser();
+		showSuccessMessage('Logout Successfully!');
+		dispatch(resetAuthStatus());
+	};
+
 	return (
 		<div className='grid grid-cols-1 md:grid-cols-12 min-h-screen relative bg-tertiary'>
 			<main className='col-span-1 md:col-span-12 2xl:col-span-12'>
@@ -112,78 +125,87 @@ const VerifyAccount = () => {
 						page. If you have not receive an email, Please click the button
 						below to resend the verification.
 					</p>
-					<button
-						onClick={handleResend}
-						disabled={sendingVerification || !canVerify}
-						className={`px-5 py-3 bg-primary text-tertiary rounded-full w-1/2 hover:bg-primary/90 hover:cursor-pointer ${sendingVerification ? 'disabled:cursor-not-allowed' : !canVerify ? 'disabled:cursor-not-allowed' : ''}`}
-					>
-						{sendingVerification ? (
-							<svg
-								xmlns='http://www.w3.org/2000/svg'
-								viewBox='0 0 200 200'
-								className='w-6 h-6 mx-auto'
-							>
-								<circle
-									fill='#f2f6d0'
-									stroke='#f2f6d0'
-									strokeWidth='15'
-									r='15'
-									cx='40'
-									cy='100'
+					<div className='flex flex-col mx-auto items-center justify-center gap-3 md:flex-row max-w-md md:max-w-md 2xl:max-w-xl w-full'>
+						<button
+							onClick={handleResend}
+							disabled={sendingVerification || !canVerify}
+							className={`px-5 py-3 bg-primary text-tertiary rounded-full w-1/2 hover:bg-primary/90 hover:cursor-pointer ${sendingVerification ? 'disabled:cursor-not-allowed' : !canVerify ? 'disabled:cursor-not-allowed' : ''}`}
+						>
+							{sendingVerification ? (
+								<svg
+									xmlns='http://www.w3.org/2000/svg'
+									viewBox='0 0 200 200'
+									className='w-6 h-6 mx-auto'
 								>
-									<animate
-										attributeName='opacity'
-										calcMode='spline'
-										dur='2'
-										values='1;0;1;'
-										keySplines='.5 0 .5 1;.5 0 .5 1'
-										repeatCount='indefinite'
-										begin='-.4'
-									></animate>
-								</circle>
-								<circle
-									fill='#f2f6d0'
-									stroke='#f2f6d0'
-									strokeWidth='15'
-									r='15'
-									cx='100'
-									cy='100'
-								>
-									<animate
-										attributeName='opacity'
-										calcMode='spline'
-										dur='2'
-										values='1;0;1;'
-										keySplines='.5 0 .5 1;.5 0 .5 1'
-										repeatCount='indefinite'
-										begin='-.2'
-									></animate>
-								</circle>
-								<circle
-									fill='#f2f6d0'
-									stroke='#f2f6d0'
-									strokeWidth='15'
-									r='15'
-									cx='160'
-									cy='100'
-								>
-									<animate
-										attributeName='opacity'
-										calcMode='spline'
-										dur='2'
-										values='1;0;1;'
-										keySplines='.5 0 .5 1;.5 0 .5 1'
-										repeatCount='indefinite'
-										begin='0'
-									></animate>
-								</circle>
-							</svg>
-						) : !canVerify ? (
-							`Resend in ${formatTIme(timeRemaining)}`
-						) : (
-							'Resend Verification'
-						)}
-					</button>
+									<circle
+										fill='#f2f6d0'
+										stroke='#f2f6d0'
+										strokeWidth='15'
+										r='15'
+										cx='40'
+										cy='100'
+									>
+										<animate
+											attributeName='opacity'
+											calcMode='spline'
+											dur='2'
+											values='1;0;1;'
+											keySplines='.5 0 .5 1;.5 0 .5 1'
+											repeatCount='indefinite'
+											begin='-.4'
+										></animate>
+									</circle>
+									<circle
+										fill='#f2f6d0'
+										stroke='#f2f6d0'
+										strokeWidth='15'
+										r='15'
+										cx='100'
+										cy='100'
+									>
+										<animate
+											attributeName='opacity'
+											calcMode='spline'
+											dur='2'
+											values='1;0;1;'
+											keySplines='.5 0 .5 1;.5 0 .5 1'
+											repeatCount='indefinite'
+											begin='-.2'
+										></animate>
+									</circle>
+									<circle
+										fill='#f2f6d0'
+										stroke='#f2f6d0'
+										strokeWidth='15'
+										r='15'
+										cx='160'
+										cy='100'
+									>
+										<animate
+											attributeName='opacity'
+											calcMode='spline'
+											dur='2'
+											values='1;0;1;'
+											keySplines='.5 0 .5 1;.5 0 .5 1'
+											repeatCount='indefinite'
+											begin='0'
+										></animate>
+									</circle>
+								</svg>
+							) : !canVerify ? (
+								`Resend in ${formatTIme(timeRemaining)}`
+							) : (
+								'Resend Verification'
+							)}
+						</button>
+						<button
+							onClick={handleLogout}
+							className='px-5 py-3 bg-primary text-tertiary rounded-full w-1/2
+						hover:bg-primary/90 hover:cursor-pointer'
+						>
+							Back to Login
+						</button>
+					</div>
 				</div>
 			</main>
 		</div>

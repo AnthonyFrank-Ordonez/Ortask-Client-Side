@@ -3,7 +3,6 @@ import { Priority, Status, TaskDataType } from '@/types';
 interface TasksResponseProps {
 	setCurrentStep: (value: React.SetStateAction<number>) => void;
 	setFormData: (value: React.SetStateAction<TaskDataType>) => void;
-	setIsSubmiited: (value: React.SetStateAction<boolean>) => void;
 	priorityData: Priority[];
 	statusData: Status[];
 }
@@ -11,7 +10,6 @@ interface TasksResponseProps {
 const TasksResponse = ({
 	setCurrentStep,
 	setFormData,
-	setIsSubmiited,
 	priorityData,
 	statusData,
 }: TasksResponseProps) => {
@@ -45,7 +43,6 @@ const TasksResponse = ({
 							priority: priorityData[0],
 							status: statusData[0],
 						});
-						setIsSubmiited(false);
 					}}
 					className='px-6 py-3  bg-primary text-tertiary rounded-full hover:bg-primary-300 hover:cursor-pointer transition-colors duration-300'
 				>

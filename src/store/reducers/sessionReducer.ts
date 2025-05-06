@@ -1,10 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AuthenticatedUser, LoggedUser, StoreState } from '../../types';
+import {
+	AuthenticatedUser,
+	CurrentPage,
+	LoggedUser,
+	StoreState,
+} from '../../types';
 
 const initialState: StoreState = {
 	user: null,
+	userLogout: false,
 	isAuthenticated: false,
 	signingIn: false,
+	currentPage: 'home',
 };
 
 const sessionSlice = createSlice({
@@ -13,6 +20,7 @@ const sessionSlice = createSlice({
 	reducers: {
 		login(state, action: PayloadAction<LoggedUser>) {
 			state.signingIn = true;
+			state.userLogout = false;
 
 			if (action.payload) {
 				state.user = action.payload.user;
@@ -24,9 +32,13 @@ const sessionSlice = createSlice({
 
 			state.signingIn = false;
 		},
+		setCurrentPage(state, action: PayloadAction<CurrentPage>) {
+			state.currentPage = action.payload.page;
+		},
 		resetAuthStatus(state) {
 			state.user = null;
 			state.isAuthenticated = false;
+			state.userLogout = true;
 		},
 		checkAuthStatus(
 			state,
@@ -40,6 +52,7 @@ const sessionSlice = createSlice({
 	},
 });
 
-export const { login, resetAuthStatus, checkAuthStatus } = sessionSlice.actions;
+export const { login, resetAuthStatus, checkAuthStatus, setCurrentPage } =
+	sessionSlice.actions;
 
 export default sessionSlice.reducer;

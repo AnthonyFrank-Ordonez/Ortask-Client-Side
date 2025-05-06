@@ -29,7 +29,7 @@ const ReviewInformation = ({
 				<div className='flex items-start md:items-center space-x-3 gap-2 flex-col md:flex-row'>
 					<h1 className='font-bold text-primary text-2xl'>Due Date: </h1>
 					<h1 className='font-normal text-xl md:mt-1'>
-						{format(formData.dueDate, 'MMMM d, yyyy')}
+						{format(formData.dueDate, 'PPPP')}
 					</h1>
 				</div>
 

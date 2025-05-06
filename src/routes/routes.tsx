@@ -9,47 +9,54 @@ import Register from '../components/auth/Register/';
 import VerifyAccount from '../components/VerifyAccount.tsx';
 import NotFound from '../components/Errors/NotFound.tsx';
 import TokenExpire from '../components/Errors/TokenExpire.tsx';
+import CheckAuth from '@/components/CheckAuth.tsx';
 
 export const router = createBrowserRouter([
 	{
-		path: '/login',
-		element: <Login />,
-	},
-	{
 		path: '/register',
 		element: <Register />,
-	},
-	{
-		path: '/verify-account',
-		element: <VerifyAccount />,
 	},
 	{
 		path: '/expire',
 		element: <TokenExpire />,
 	},
 	{
-		element: <ProtectedRoute />,
+		element: <CheckAuth />,
 		children: [
 			{
-				path: '/',
-				element: <App />,
+				path: '/login',
+				element: <Login />,
+			},
+			{
+				path: '/verify-account',
+				element: <VerifyAccount />,
+			},
+			{
+				element: <ProtectedRoute />,
 				children: [
 					{
-						index: true,
-						element: <Home />,
-					},
-					{
-						path: '/task-lists',
-						element: <TasksLists />,
-					},
-					{
-						path: '/new-task',
-						element: <NewTask />,
+						path: '/',
+						element: <App />,
+						children: [
+							{
+								index: true,
+								element: <Home />,
+							},
+							{
+								path: '/task-lists',
+								element: <TasksLists />,
+							},
+							{
+								path: '/new-task',
+								element: <NewTask />,
+							},
+						],
 					},
 				],
 			},
 		],
 	},
+
 	{
 		path: '*',
 		element: <NotFound />,

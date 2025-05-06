@@ -6,6 +6,8 @@ export const useCheckAuth = () => {
 		queryKey: ['auth'],
 		queryFn: authService.checkUserAuth,
 		refetchOnWindowFocus: false,
+		refetchOnMount: window.__shouldCheckAuth || false,
+		staleTime: 30 * 60 * 1000,
 		retry: 0,
 	});
 };

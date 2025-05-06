@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetAuthStatus } from '@/store/reducers/sessionReducer';
+import {
+	resetAuthStatus,
+	setCurrentPage,
+} from '@/store/reducers/sessionReducer';
 import { RootState } from '@/store/store';
 import { useLogout } from '@/hooks/auth';
 import { useToastSuccess } from '@/hooks/notification';
@@ -9,37 +12,15 @@ import { useToastSuccess } from '@/hooks/notification';
 function App() {
 	const dispatch = useDispatch();
 	const showSuccessMessage = useToastSuccess();
-	const { user } = useSelector((state: RootState) => state.session);
+	const { user, currentPage } = useSelector(
+		(state: RootState) => state.session
+	);
 	const { mutateAsync: logoutAuthenticatedUser } = useLogout();
 	const [sidebarOpen, setSidebarOpen] = useState(false);
-	const [currentPage, setCurrentPage] = useState('home');
-
-	const navItems = [
-		{
-			icon: (
-				<svg
-					xmlns='http://www.w3.org/2000/svg'
-					width='24'
-					height='24'
-					viewBox='0 0 24 24'
-					fill='none'
-					stroke='currentColor'
-					strokeWidth='2'
-					strokeLinecap='round'
-					strokeLinejoin='round'
-					className='lucide lucide-settings-icon lucide-settings'
-				>
-					<path d='M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z' />
-					<circle cx='12' cy='12' r='3' />
-				</svg>
-			),
-			label: 'Settings',
-		},
-	];
 
 	const handleSetCurrentPage = (event: React.MouseEvent<HTMLAnchorElement>) => {
 		const page = event.currentTarget.dataset.page;
-		if (page) setCurrentPage(page);
+		if (page) dispatch(setCurrentPage({ page }));
 	};
 
 	const toggleSidebar = () => {
@@ -241,17 +222,41 @@ function App() {
 							</NavLink>
 						</li>
 
-						{navItems.map((item, index) => (
-							<li key={index}>
-								<a
-									href='#'
-									className={`flex items-center p-2 rounded-md hover:bg-tertiary/10 transform hover:-translate-y-0.5 transition-transform duration-200`}
-								>
-									<div className='mr-3'>{item.icon}</div>
-									<span>{item.label}</span>
-								</a>
-							</li>
-						))}
+						<li>
+							<NavLink
+								onClick={handleSetCurrentPage}
+								data-page='calendar'
+								to='/calendar'
+								className={`flex items-center p-2 rounded-md hover:bg-tertiary/10 transform hover:-translate-y-0.5 transition-transform duration-200 ${currentPage === 'calendar' ? 'bg-tertiary/10' : ''}`}
+							>
+								<div className='mr-3'>
+									<svg
+										xmlns='http://www.w3.org/2000/svg'
+										width='24'
+										height='24'
+										viewBox='0 0 24 24'
+										fill='none'
+										stroke='currentColor'
+										strokeWidth='2'
+										strokeLinecap='round'
+										strokeLinejoin='round'
+										className='lucide lucide-calendar-days-icon lucide-calendar-days'
+									>
+										<path d='M8 2v4' />
+										<path d='M16 2v4' />
+										<rect width='18' height='18' x='3' y='4' rx='2' />
+										<path d='M3 10h18' />
+										<path d='M8 14h.01' />
+										<path d='M12 14h.01' />
+										<path d='M16 14h.01' />
+										<path d='M8 18h.01' />
+										<path d='M12 18h.01' />
+										<path d='M16 18h.01' />
+									</svg>
+								</div>
+								<span>Calendar</span>
+							</NavLink>
+						</li>
 
 						<li>
 							<NavLink

@@ -109,7 +109,6 @@ const TaskInformation = ({
 							mode='single'
 							selected={formData.dueDate}
 							onSelect={handleSelectDate}
-							initialFocus
 							classNames={{
 								day_selected: 'bg-tertiary text-black',
 								day_today: 'bg-tertiary-500/10',
