@@ -1,12 +1,5 @@
-import {
-	useEffect,
-	// useState
-} from 'react';
-import {
-	// RegisterForm,
-	// RegisterUser,
-	Role,
-} from '../../../types';
+import { useEffect } from 'react';
+import { Role } from '../../../types';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useRegister } from '../../../hooks/users';
 import { AxiosError } from 'axios';
@@ -60,13 +53,6 @@ const Register = () => {
 	const { isAuthenticated } = useSelector((state: RootState) => state.session);
 	const { mutateAsync: userRegister, isPending: creatingUser } = useRegister();
 	const navigate = useNavigate();
-	// const [registerForm, setRegisterForm] = useState<RegisterForm>({
-	// 	email: '',
-	// 	username: '',
-	// 	password: '',
-	// 	confirmPassword: '',
-	// 	role: rolesData[0] as Role,
-	// });
 
 	const form = useForm({
 		defaultValues: {
@@ -115,63 +101,6 @@ const Register = () => {
 			dispatch(setCurrentPage({ page: 'home' }));
 		}
 	}, [dispatch, isAuthenticated, navigate]);
-
-	// const handleInputChange = (event: React.SyntheticEvent) => {
-	// 	if ('target' in event && event.target instanceof HTMLInputElement) {
-	// 		const { name, value } = event.target;
-
-	// 		setRegisterForm((prevData) => ({
-	// 			...prevData,
-	// 			[name]: value,
-	// 		}));
-	// 	}
-	// };
-
-	// const handleSelectChange = (value: string) => {
-	// 	const roleData = rolesData.find((role) => role === value);
-
-	// 	if (roleData)
-	// 		setRegisterForm((prevData) => ({
-	// 			...prevData,
-	// 			role: roleData,
-	// 		}));
-	// };
-
-	// const handleRegister = async (event: React.SyntheticEvent) => {
-	// 	event.preventDefault();
-	// 	const { confirmPassword, ...registerUser } = registerForm;
-
-	// 	if (registerUser.password !== confirmPassword) {
-	// 		showErrorMessage('Password is not matched!');
-	// 	} else {
-	// 		const newUser: RegisterUser = registerUser;
-	// 		await userRegister(newUser, {
-	// 			onSuccess: (data) => {
-	// 				navigate('/login');
-	// 				showSuccessMessage(data.message);
-	// 			},
-	// 			onError: (error: unknown) => {
-	// 				if (error instanceof AxiosError) {
-	// 					const message: string = error.response?.data.error;
-
-	// 					if (Array.isArray(message)) {
-	// 						const errorMessage: string =
-	// 							error.response?.data.error[0].message;
-
-	// 						if (errorMessage.includes('Password'))
-	// 							showErrorMessage(errorMessage);
-	// 					} else {
-	// 						if (message.includes('username')) {
-	// 							showErrorMessage('Username is already taken!');
-	// 						} else if (message.includes('email')) {
-	// 							showErrorMessage('Email is already taken!');
-	// 						}
-	// 					}
-	// 				}
-	// 			},
-	// 		});
-	// 	}
-	// };
 
 	return (
 		<div className='grid grid-cols-1 md:grid-cols-12 min-h-screen bg-tertiary-300'>

@@ -12,7 +12,3 @@ export const useToastError = () => {
 		toast.error(message, { position: 'top-right' });
 	}, []);
 };
-
-// export const useToastWarning = () => {
-// 	return (message: string) => toast.warn(message, { position: 'top-right' });
-// };

@@ -1,5 +1,5 @@
 import { API_URLS } from '@/utils';
-import { NewTask, TaskDataType } from '@/types';
+import { NewTask, TaskDataType, Tasks } from '@/types';
 import { ErrorResponse } from 'react-router-dom';
 import axiosInstance from './axiosInstance';
 
@@ -11,4 +11,9 @@ const createTask = async (newTask: TaskDataType) => {
 	return response.data;
 };
 
-export default { createTask };
+const getTasks = async () => {
+	const response = await axiosInstance.get<Tasks[]>(API_URLS.TASKS);
+	return response.data;
+};
+
+export default { createTask, getTasks };

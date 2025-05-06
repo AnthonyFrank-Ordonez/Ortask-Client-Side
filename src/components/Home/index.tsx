@@ -6,9 +6,12 @@ import TasksGraph from './TasksGraph';
 import TasksStatistics from './TasksStatistics';
 import HomeOverview from './HomeOverview';
 import { NavLink } from 'react-router-dom';
+import { useGetTaskStats, useGetUserTasks } from '@/hooks/tasks';
 
 const Home = () => {
 	const { user } = useSelector((state: RootState) => state.session);
+	const { data: userTasks } = useGetUserTasks(user);
+	const { data: taskData } = useGetTaskStats(user);
 
 	useEffect(() => {
 		const storeverifyPageToken = localStorage.getItem(
@@ -43,9 +46,9 @@ const Home = () => {
 			</div>
 
 			<HomeOverview />
-			<TasksStatistics />
-			<RecentTask />
-			<TasksGraph />
+			<TasksStatistics userTasks={userTasks} />
+			<RecentTask userTask={userTasks} />
+			<TasksGraph taskData={taskData} />
 		</>
 	);
 };

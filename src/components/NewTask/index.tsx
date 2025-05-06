@@ -7,11 +7,13 @@ import Stepper from './Stepper';
 import { useCreateTask } from '@/hooks/tasks';
 import { useToastError, useToastSuccess } from '@/hooks/notification';
 import { AxiosError } from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
 
 const priorityData: Priority[] = ['Medium', 'Highest', 'Critical'];
 const statusData: Status[] = ['To Do', 'In Progress', 'Completed'];
 
 const NewTask = () => {
+	const queryClient = useQueryClient();
 	const showSuccessMessage = useToastSuccess();
 	const showErrorMessage = useToastError();
 	const [currentStep, setCurrentStep] = useState(1);
@@ -35,10 +37,14 @@ const NewTask = () => {
 		event.preventDefault();
 
 		await createNewTask(formData, {
-			onSuccess: (data) => {
+			onSuccess: async (data) => {
 				if ('taskName' in data) {
 					setCurrentStep(3);
 					showSuccessMessage(`Task ${data.taskName} successfully created!`);
+					await Promise.all([
+						queryClient.invalidateQueries({ queryKey: ['tasks'] }),
+						queryClient.invalidateQueries({ queryKey: ['task-analytics'] }),
+					]);
 				}
 			},
 			onError: (error: unknown) => {

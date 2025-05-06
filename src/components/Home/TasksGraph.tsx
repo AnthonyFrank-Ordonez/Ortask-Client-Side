@@ -7,17 +7,17 @@ import {
 	YAxis,
 	LineChart,
 } from 'recharts';
-import { TaskAnalyticsData } from '../../types';
 
-const TasksGraph = () => {
-	const taskData: TaskAnalyticsData[] = [
-		{ day: 'Monday', tasks: 12 },
-		{ day: 'Tuesday', tasks: 8 },
-		{ day: 'Wednesday', tasks: 15 },
-		{ day: 'Thursday', tasks: 10 },
-		{ day: 'Friday', tasks: 5 },
-	];
+interface TasksGraphProps {
+	taskData:
+		| {
+				day: string;
+				tasks: number;
+		  }[]
+		| undefined;
+}
 
+const TasksGraph = ({ taskData }: TasksGraphProps) => {
 	return (
 		<>
 			<div className='bg-tertiary/20 p-6 rounded-lg shadow border-2 border-gray-400/10 h-auto lg:h-auto relative ml-3'>

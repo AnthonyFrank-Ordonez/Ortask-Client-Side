@@ -85,6 +85,25 @@ export interface NewTask extends TaskDataType {
 	};
 }
 
+export interface Tasks {
+	id: string;
+	taskName: string;
+	dueDate: Date;
+	priority: Priority;
+	status: Status;
+	slug: string;
+	user: string[];
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+export interface UserTasksProps {
+	allTask: Tasks[];
+	completed: Tasks[];
+	inProgress: Tasks[];
+	recentAddedTasks: Tasks[];
+}
+
 export interface RegisterResponse {
 	message: string;
 }
