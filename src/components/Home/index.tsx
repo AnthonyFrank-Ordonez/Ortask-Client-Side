@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import RecentTask from './RecentTask';
 import TasksGraph from './TasksGraph';
@@ -7,8 +7,10 @@ import TasksStatistics from './TasksStatistics';
 import HomeOverview from './HomeOverview';
 import { NavLink } from 'react-router-dom';
 import { useGetTaskStats, useGetUserTasks } from '@/hooks/tasks';
+import { setCurrentPage } from '@/store/reducers/sessionReducer';
 
 const Home = () => {
+	const dispatch = useDispatch();
 	const { user } = useSelector((state: RootState) => state.session);
 	const { data: userTasks } = useGetUserTasks(user);
 	const { data: taskData } = useGetTaskStats(user);
@@ -38,7 +40,10 @@ const Home = () => {
 					</div>
 
 					<NavLink to='/new-task'>
-						<button className='bg-primary-400 text-tertiary rounded-full font-bold p-3 md:p-5 hover:bg-primary-300 cursor-pointer'>
+						<button
+							onClick={() => dispatch(setCurrentPage({ page: 'new-task' }))}
+							className='bg-primary-400 text-tertiary rounded-full font-bold p-3 md:p-5 hover:bg-primary-300 cursor-pointer'
+						>
 							Add New Task
 						</button>
 					</NavLink>

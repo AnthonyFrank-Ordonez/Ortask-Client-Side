@@ -8,11 +8,14 @@ import { useCreateTask } from '@/hooks/tasks';
 import { useToastError, useToastSuccess } from '@/hooks/notification';
 import { AxiosError } from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 const priorityData: Priority[] = ['Medium', 'Highest', 'Critical'];
 const statusData: Status[] = ['To Do', 'In Progress', 'Completed'];
 
 const NewTask = () => {
+	const { user } = useSelector((state: RootState) => state.session);
 	const queryClient = useQueryClient();
 	const showSuccessMessage = useToastSuccess();
 	const showErrorMessage = useToastError();
@@ -42,8 +45,10 @@ const NewTask = () => {
 					setCurrentStep(3);
 					showSuccessMessage(`Task ${data.taskName} successfully created!`);
 					await Promise.all([
-						queryClient.invalidateQueries({ queryKey: ['tasks'] }),
-						queryClient.invalidateQueries({ queryKey: ['task-analytics'] }),
+						queryClient.invalidateQueries({ queryKey: ['tasks', user?.id] }),
+						queryClient.invalidateQueries({
+							queryKey: ['task-analytics', user?.id],
+						}),
 					]);
 				}
 			},

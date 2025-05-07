@@ -10,6 +10,7 @@ import VerifyAccount from '../components/VerifyAccount.tsx';
 import NotFound from '../components/Errors/NotFound.tsx';
 import TokenExpire from '../components/Errors/TokenExpire.tsx';
 import CheckAuth from '@/components/CheckAuth.tsx';
+import Calendar from '@/components/Calendar';
 
 export const router = createBrowserRouter([
 	{
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
 							{
 								path: '/new-task',
 								element: <NewTask />,
+							},
+							{
+								path: '/calendar',
+								element: <Calendar />,
 							},
 						],
 					},

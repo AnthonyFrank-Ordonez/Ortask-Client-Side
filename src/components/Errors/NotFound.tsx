@@ -1,7 +1,14 @@
+import { setCurrentPage } from '@/store/reducers/sessionReducer';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 const NotFound = () => {
 	const navigigate = useNavigate();
+	const dispatch = useDispatch();
+	const handlebackNavigation = () => {
+		navigigate('/');
+		dispatch(setCurrentPage({ page: 'home' }));
+	};
 	return (
 		<div className='grid grid-cols-1 md:grid-cols-12 min-h-screen relative bg-tertiary'>
 			<main className='col-span-1 md:col-span-12 2xl:col-span-12'>
@@ -10,7 +17,7 @@ const NotFound = () => {
 						404 NOT FOUND
 					</h1>
 					<button
-						onClick={() => navigigate('/')}
+						onClick={handlebackNavigation}
 						className='px-3 py-2 bg-primary rounded-full text-tertiary hover:bg-primary/80 cursor-pointer'
 					>
 						Go Back to Home

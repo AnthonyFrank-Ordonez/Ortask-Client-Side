@@ -101,7 +101,13 @@ export interface UserTasksProps {
 	allTask: Tasks[];
 	completed: Tasks[];
 	inProgress: Tasks[];
+	toDo: Tasks[];
 	recentAddedTasks: Tasks[];
+}
+
+export interface UpdateTaskArg {
+	id: string;
+	updatedStatus: string;
 }
 
 export interface RegisterResponse {

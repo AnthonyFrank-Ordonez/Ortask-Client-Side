@@ -10,9 +10,15 @@ export const useCreateTask = () => {
 	});
 };
 
+export const useUpdateTask = () => {
+	return useMutation({
+		mutationFn: taskService.updateTask,
+	});
+};
+
 export const useGetUserTasks = (user: User | null) => {
 	return useQuery({
-		queryKey: ['tasks'],
+		queryKey: ['tasks', user?.id],
 		queryFn: taskService.getTasks,
 		refetchOnWindowFocus: false,
 		enabled: !!user,
@@ -20,6 +26,7 @@ export const useGetUserTasks = (user: User | null) => {
 		select: (tasks) => {
 			return {
 				allTask: tasks,
+				toDo: tasks.filter((task) => task.status === 'To Do'),
 				completed: tasks.filter((task) => task.status === 'Completed'),
 				inProgress: tasks.filter((task) => task.status === 'In Progress'),
 				recentAddedTasks: tasks
@@ -36,7 +43,7 @@ export const useGetUserTasks = (user: User | null) => {
 
 export const useGetTaskStats = (user: User | null) => {
 	return useQuery({
-		queryKey: ['task-analytics'],
+		queryKey: ['task-analytics', user?.id],
 		queryFn: taskService.getTasks,
 		refetchOnWindowFocus: false,
 		enabled: !!user,

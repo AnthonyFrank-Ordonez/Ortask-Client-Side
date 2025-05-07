@@ -20,19 +20,30 @@ const TasksStatistics = ({ userTasks }: TasksStatisticsProps) => {
 							: 0}
 					</p>
 				</div>
+
 				<div className='flex-1 bg-primary-400 p-4 rounded text-tertiary'>
-					<p className='text-lg font-medium'>Tasks Completed</p>
+					<p className='text-lg font-medium'>Tasks Pending</p>
 					<p className='text-2xl font-bold'>
-						{userTasks && userTasks.completed?.length >= 1
-							? userTasks.completed?.length
+						{userTasks && userTasks.toDo?.length >= 1
+							? userTasks.toDo?.length
 							: 0}
 					</p>
 				</div>
+
 				<div className='flex-1 bg-primary-400 p-4 rounded text-tertiary'>
 					<p className='text-lg font-medium'>Tasks Inprogress</p>
 					<p className='text-2xl font-bold'>
 						{userTasks && userTasks.inProgress?.length >= 1
 							? userTasks.inProgress?.length
+							: 0}
+					</p>
+				</div>
+
+				<div className='flex-1 bg-primary-400 p-4 rounded text-tertiary'>
+					<p className='text-lg font-medium'>Tasks Completed</p>
+					<p className='text-2xl font-bold'>
+						{userTasks && userTasks.completed?.length >= 1
+							? userTasks.completed?.length
 							: 0}
 					</p>
 				</div>

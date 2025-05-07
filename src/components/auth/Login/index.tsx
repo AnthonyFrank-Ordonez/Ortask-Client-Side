@@ -24,7 +24,7 @@ const Login = () => {
 		},
 		onSubmit: async ({ value }) => {
 			await loginUser(value, {
-				onSuccess: (data) => {
+				onSuccess: async (data) => {
 					dispatch(login(data));
 					showSuccessMessage('Login Success!');
 					navigate('/');

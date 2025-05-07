@@ -2,11 +2,45 @@ import { useState } from 'react';
 import InProgressTask from './InProgress';
 import PendingTasks from './PendingTasks';
 import CompletedTasks from './CompletedTasks';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { useGetUserTasks, useUpdateTask } from '@/hooks/tasks';
+import { UpdateTaskArg } from '@/types';
+import { AxiosError } from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
+import { useToastError, useToastSuccess } from '@/hooks/notification';
 
 const TasksLists = () => {
+	const queryClient = useQueryClient();
+	const showSuccessMessage = useToastSuccess();
+	const showErrorMessage = useToastError();
+	const { user } = useSelector((state: RootState) => state.session);
+	const { data: userTasks } = useGetUserTasks(user);
+	const { mutateAsync: updateTask } = useUpdateTask();
 	const [isInProgressOpen, setInProgressOpen] = useState(true);
 	const [isPendingOpen, setPendingOpen] = useState(false);
 	const [isCompletedOpen, setCompletedOpen] = useState(false);
+	const inProgressTasks = userTasks?.inProgress;
+	const pendingTasks = userTasks?.toDo;
+	const completedTasks = userTasks?.completed;
+
+	const handleChangeStatus = async (value: string) => {
+		const parseObj: UpdateTaskArg = JSON.parse(value);
+
+		await updateTask(parseObj, {
+			onSuccess: () => {
+				showSuccessMessage('Task updated successfully');
+				queryClient.invalidateQueries({ queryKey: ['tasks', user?.id] });
+			},
+			onError: (error: unknown) => {
+				if (error instanceof AxiosError) {
+					const errorMsg = error.response?.data.error.message;
+					console.error(errorMsg);
+					showErrorMessage('Failed to update task, try again');
+				}
+			},
+		});
+	};
 
 	return (
 		<>
@@ -31,16 +65,22 @@ const TasksLists = () => {
 			<InProgressTask
 				setInProgressOpen={setInProgressOpen}
 				isInProgressOpen={isInProgressOpen}
+				inProgressTasks={inProgressTasks}
+				handleChangeStatus={handleChangeStatus}
 			/>
 
 			<PendingTasks
 				setPendingOpen={setPendingOpen}
 				isPendingOpen={isPendingOpen}
+				pendingTasks={pendingTasks}
+				handleChangeStatus={handleChangeStatus}
 			/>
 
 			<CompletedTasks
 				setCompletedOpen={setCompletedOpen}
 				isCompletedOpen={isCompletedOpen}
+				completedTasks={completedTasks}
+				handleChangeStatus={handleChangeStatus}
 			/>
 		</>
 	);
