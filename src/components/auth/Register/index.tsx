@@ -16,35 +16,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setCurrentPage } from '@/store/reducers/sessionReducer';
 import { useForm } from '@tanstack/react-form';
-import { z } from 'zod';
 import FieldInfo from '@/components/FieldInfo';
+import { registerSchema } from '@/utils/schema';
 
 const rolesData: Role[] = ['Employee', 'Lead', 'Manager'];
-
-const zodSchema = z
-	.object({
-		email: z.string().email('Must be valid email'),
-		username: z.string().min(8, 'Username must be atleast 8 or more'),
-		password: z
-			.string()
-			.min(8, 'Pasword length must be 8 or more')
-			.regex(
-				/^(?=.*?[A-Z]).+$/,
-				'Password must have alteast one capital letter'
-			)
-			.regex(/^(?=.*?[0-9]).+$/, 'Password nust have atleast 1 digit'),
-		confirmPassword: z.string(),
-		role: z.enum(['Employee', 'Lead', 'Manager']),
-	})
-	.superRefine(({ confirmPassword, password }, ctx) => {
-		if (confirmPassword !== password) {
-			ctx.addIssue({
-				code: 'custom',
-				message: 'Password is not match',
-				path: ['confirmPassword'],
-			});
-		}
-	});
 
 const Register = () => {
 	const showSuccessMessage = useToastSuccess();
@@ -53,6 +28,13 @@ const Register = () => {
 	const { isAuthenticated } = useSelector((state: RootState) => state.session);
 	const { mutateAsync: userRegister, isPending: creatingUser } = useRegister();
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			navigate('/');
+			dispatch(setCurrentPage({ page: 'home' }));
+		}
+	}, [dispatch, isAuthenticated, navigate]);
 
 	const form = useForm({
 		defaultValues: {
@@ -63,7 +45,7 @@ const Register = () => {
 			role: rolesData[0],
 		},
 		validators: {
-			onChange: zodSchema,
+			onChange: registerSchema,
 		},
 		onSubmit: async ({ value }) => {
 			console.log(value);
@@ -94,13 +76,6 @@ const Register = () => {
 			});
 		},
 	});
-
-	useEffect(() => {
-		if (isAuthenticated) {
-			navigate('/');
-			dispatch(setCurrentPage({ page: 'home' }));
-		}
-	}, [dispatch, isAuthenticated, navigate]);
 
 	return (
 		<div className='grid grid-cols-1 md:grid-cols-12 min-h-screen bg-tertiary-300'>

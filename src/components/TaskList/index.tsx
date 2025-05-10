@@ -4,11 +4,12 @@ import PendingTasks from './PendingTasks';
 import CompletedTasks from './CompletedTasks';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { useGetUserTasks, useUpdateTask } from '@/hooks/tasks';
+import { useDeleteTask, useGetUserTasks, useUpdateTask } from '@/hooks/tasks';
 import { UpdateTaskArg } from '@/types';
 import { AxiosError } from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
 import { useToastError, useToastSuccess } from '@/hooks/notification';
+import DeleteModal from './DeleteModal';
 
 const TasksLists = () => {
 	const queryClient = useQueryClient();
@@ -17,9 +18,14 @@ const TasksLists = () => {
 	const { user } = useSelector((state: RootState) => state.session);
 	const { data: userTasks } = useGetUserTasks(user);
 	const { mutateAsync: updateTask } = useUpdateTask();
+	const { mutateAsync: deleteTask } = useDeleteTask();
 	const [isInProgressOpen, setInProgressOpen] = useState(true);
 	const [isPendingOpen, setPendingOpen] = useState(false);
 	const [isCompletedOpen, setCompletedOpen] = useState(false);
+	const [showDeleteModal, setShowDeleteModal] = useState({
+		show: false,
+		taskID: '',
+	});
 	const inProgressTasks = userTasks?.inProgress;
 	const pendingTasks = userTasks?.toDo;
 	const completedTasks = userTasks?.completed;
@@ -42,6 +48,39 @@ const TasksLists = () => {
 		});
 	};
 
+	const handleDeleteTask = async () => {
+		const taskId = showDeleteModal.taskID;
+
+		await deleteTask(taskId, {
+			onSuccess: () => {
+				showSuccessMessage('Successfully deleted task');
+				setShowDeleteModal({ show: false, taskID: '' });
+				queryClient.invalidateQueries({ queryKey: ['tasks', user?.id] });
+			},
+			onError: (error: unknown) => {
+				if (error instanceof AxiosError) {
+					const errorMsg = error.response?.data.error.message;
+					console.error(errorMsg);
+					showErrorMessage(`${error}`);
+				}
+			},
+		});
+	};
+
+	const showModal = (id: string) => {
+		setShowDeleteModal({
+			show: true,
+			taskID: id,
+		});
+	};
+
+	const closeModal = () => {
+		setShowDeleteModal({
+			show: false,
+			taskID: '',
+		});
+	};
+
 	return (
 		<>
 			<div className='p-6 relative'>
@@ -54,11 +93,6 @@ const TasksLists = () => {
 							Welcome to your tasks list page! Here are the list of your tasks.
 						</p>
 					</div>
-					<input
-						className='shadow border py-2 px-5 w-full md:w-auto rounded-md border-primary-200 appearance-none focus:outline-none'
-						type='text'
-						placeholder='Search Tasks...'
-					/>
 				</div>
 			</div>
 
@@ -67,6 +101,7 @@ const TasksLists = () => {
 				isInProgressOpen={isInProgressOpen}
 				inProgressTasks={inProgressTasks}
 				handleChangeStatus={handleChangeStatus}
+				showModal={showModal}
 			/>
 
 			<PendingTasks
@@ -74,6 +109,7 @@ const TasksLists = () => {
 				isPendingOpen={isPendingOpen}
 				pendingTasks={pendingTasks}
 				handleChangeStatus={handleChangeStatus}
+				showModal={showModal}
 			/>
 
 			<CompletedTasks
@@ -81,7 +117,15 @@ const TasksLists = () => {
 				isCompletedOpen={isCompletedOpen}
 				completedTasks={completedTasks}
 				handleChangeStatus={handleChangeStatus}
+				showModal={showModal}
 			/>
+
+			{showDeleteModal.show && (
+				<DeleteModal
+					closeModal={closeModal}
+					handleDeleteTask={handleDeleteTask}
+				/>
+			)}
 		</>
 	);
 };

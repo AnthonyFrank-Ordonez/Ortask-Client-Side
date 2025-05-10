@@ -16,6 +16,12 @@ export const useUpdateTask = () => {
 	});
 };
 
+export const useDeleteTask = () => {
+	return useMutation({
+		mutationFn: taskService.deleteTask,
+	});
+};
+
 export const useGetUserTasks = (user: User | null) => {
 	return useQuery({
 		queryKey: ['tasks', user?.id],

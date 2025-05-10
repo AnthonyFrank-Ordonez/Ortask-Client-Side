@@ -16,6 +16,13 @@ const Login = () => {
 	const { isAuthenticated } = useSelector((state: RootState) => state.session);
 	const { mutateAsync: loginUser } = useLogin();
 
+	useEffect(() => {
+		if (isAuthenticated) {
+			navigate('/');
+			dispatch(setCurrentPage({ page: 'home' }));
+		}
+	}, [dispatch, isAuthenticated, navigate]);
+
 	const form = useForm({
 		defaultValues: {
 			email: '',
@@ -40,13 +47,6 @@ const Login = () => {
 			});
 		},
 	});
-
-	useEffect(() => {
-		if (isAuthenticated) {
-			navigate('/');
-			dispatch(setCurrentPage({ page: 'home' }));
-		}
-	}, [dispatch, isAuthenticated, navigate]);
 
 	return (
 		<div className='grid grid-cols-1 md:grid-cols-12 min-h-screen bg-tertiary-300 relative'>

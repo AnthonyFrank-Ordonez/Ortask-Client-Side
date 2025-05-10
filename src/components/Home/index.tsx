@@ -8,10 +8,12 @@ import HomeOverview from './HomeOverview';
 import { NavLink } from 'react-router-dom';
 import { useGetTaskStats, useGetUserTasks } from '@/hooks/tasks';
 import { setCurrentPage } from '@/store/reducers/sessionReducer';
+import { useGetUserProfile } from '@/hooks/profile';
 
 const Home = () => {
 	const dispatch = useDispatch();
 	const { user } = useSelector((state: RootState) => state.session);
+	const { data: userProfile } = useGetUserProfile(user);
 	const { data: userTasks } = useGetUserTasks(user);
 	const { data: taskData } = useGetTaskStats(user);
 
@@ -32,7 +34,7 @@ const Home = () => {
 				<div className='flex flex-col md:flex-row md:items-center justify-between'>
 					<div>
 						<h1 className='text-6xl font-bold text-primary mb-3'>
-							Hello, {user?.username}
+							Hello, {userProfile?.user.username}
 						</h1>
 						<p className='text-primary text-xl ml-2 mb-4 md:mb-0'>
 							Welcome to your dashboard! Here's your summary for today.

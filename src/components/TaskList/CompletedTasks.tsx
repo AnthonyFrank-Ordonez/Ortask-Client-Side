@@ -9,12 +9,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '../ui/select';
+import { Trash } from 'lucide-react';
 
 interface CompletedTasksProps {
 	setCompletedOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	isCompletedOpen: boolean;
 	completedTasks: Tasks[] | undefined;
 	handleChangeStatus: (value: string) => Promise<void>;
+	showModal: (id: string) => void;
 }
 
 const CompletedTasks = ({
@@ -22,6 +24,7 @@ const CompletedTasks = ({
 	isCompletedOpen,
 	completedTasks,
 	handleChangeStatus,
+	showModal,
 }: CompletedTasksProps) => {
 	return (
 		<div className='bg-tertiary/20 rounded-lg shadow border-2 border-gray-400/10 h-auto lg:h-auto relative ml-3'>
@@ -67,6 +70,7 @@ const CompletedTasks = ({
 									<th className='px-4 py-3 text-left text-sm font-medium text-primary uppercase tracking-wider'>
 										Status
 									</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody className='bg-white divide-y divide-gray-200'>
@@ -125,6 +129,12 @@ const CompletedTasks = ({
 													</SelectGroup>
 												</SelectContent>
 											</Select>
+										</td>
+										<td
+											onClick={() => showModal(task.id)}
+											className='px-4 py-4 whitespace-nowrap text-sm uppercase font-medium text-gray-500 cursor-pointer'
+										>
+											<Trash size={18} className='hover:text-black' />
 										</td>
 									</tr>
 								))}

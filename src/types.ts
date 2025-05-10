@@ -110,6 +110,29 @@ export interface UpdateTaskArg {
 	updatedStatus: string;
 }
 
+export interface UserProfile {
+	username: string;
+	profilePicture: string;
+}
+
+export interface UpdateProfileResponse {
+	success: boolean;
+	user: {
+		id: string;
+		username: string;
+		hasProfilePicture: boolean;
+	};
+}
+
+export interface UserProfileResponse {
+	success: boolean;
+	user: {
+		id: string;
+		username: string;
+		profilePictureUrl: string | undefined;
+	};
+}
+
 export interface RegisterResponse {
 	message: string;
 }

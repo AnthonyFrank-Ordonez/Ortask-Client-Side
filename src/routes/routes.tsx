@@ -14,10 +14,6 @@ import Calendar from '@/components/Calendar';
 
 export const router = createBrowserRouter([
 	{
-		path: '/register',
-		element: <Register />,
-	},
-	{
 		path: '/expire',
 		element: <TokenExpire />,
 	},
@@ -27,6 +23,10 @@ export const router = createBrowserRouter([
 			{
 				path: '/login',
 				element: <Login />,
+			},
+			{
+				path: '/register',
+				element: <Register />,
 			},
 			{
 				path: '/verify-account',

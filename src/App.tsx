@@ -8,6 +8,8 @@ import {
 import { RootState } from '@/store/store';
 import { useLogout } from '@/hooks/auth';
 import { useToastSuccess } from '@/hooks/notification';
+import EditProfile from './components/Home/EditProfile';
+import { useGetUserProfile } from './hooks/profile';
 
 function App() {
 	const dispatch = useDispatch();
@@ -15,8 +17,10 @@ function App() {
 	const { user, currentPage } = useSelector(
 		(state: RootState) => state.session
 	);
+	const { data: userProfile } = useGetUserProfile(user);
 	const { mutateAsync: logoutAuthenticatedUser } = useLogout();
 	const [sidebarOpen, setSidebarOpen] = useState(false);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const handleSetCurrentPage = (event: React.MouseEvent<HTMLAnchorElement>) => {
 		const page = event.currentTarget.dataset.page;
@@ -92,24 +96,38 @@ function App() {
 
 				<div className='p-3'>
 					<div className='flex items-center justify-center flex-col'>
-						<svg
-							xmlns='http://www.w3.org/2000/svg'
-							viewBox='0 0 24 24'
-							fill='none'
-							stroke='currentColor'
-							strokeWidth='2'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-							className='w-24 h-24 mb-3 lucide lucide-circle-user-round-icon lucide-circle-user-round'
-						>
-							<path d='M18 20a6 6 0 0 0-12 0' />
-							<circle cx='12' cy='10' r='4' />
-							<circle cx='12' cy='12' r='10' />
-						</svg>
+						{!userProfile?.user.profilePictureUrl ? (
+							<svg
+								xmlns='http://www.w3.org/2000/svg'
+								viewBox='0 0 24 24'
+								fill='none'
+								stroke='currentColor'
+								strokeWidth='2'
+								strokeLinecap='round'
+								strokeLinejoin='round'
+								className='w-24 h-24 mb-3 lucide lucide-circle-user-round-icon lucide-circle-user-round'
+							>
+								<path d='M18 20a6 6 0 0 0-12 0' />
+								<circle cx='12' cy='10' r='4' />
+								<circle cx='12' cy='12' r='10' />
+							</svg>
+						) : (
+							<div className='flex justify-center mb-3 mt-5'>
+								<div className='w-24 h-24 rounded-full overflow-hidden border-3 border-tertiary'>
+									<img
+										src={userProfile?.user.profilePictureUrl}
+										alt='Profile Image'
+										className='w-full h-full object-cover'
+									/>
+								</div>
+							</div>
+						)}
+
 						<h1 className='text-2xl font-bold mb-3 text-center'>
-							{user?.username}
+							{userProfile?.user.username}
 						</h1>
 
+						{/* Edit Profile Button */}
 						<div className='flex flex-row space-x-1 items-center border border-tertiary px-2 py-1 rounded-full hover:bg-primary-100/10 cursor-pointer'>
 							<svg
 								xmlns='http://www.w3.org/2000/svg'
@@ -124,7 +142,13 @@ function App() {
 								<path d='M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z' />
 								<path d='m15 5 4 4' />
 							</svg>
-							<h1 className='text-base font-medium'>Edit Profile</h1>
+
+							<h1
+								className='text-base font-medium'
+								onClick={() => setIsModalOpen(true)}
+							>
+								Edit Profile
+							</h1>
 						</div>
 					</div>
 				</div>
@@ -294,6 +318,7 @@ function App() {
 			<main className='w-full col-span-1 md:col-span-10 bg-tertiary/50 min-h-screen p-6 pt-16 md:pt-6'>
 				<div className='grid grid-cols-1 gap-8'>
 					<Outlet />
+					{isModalOpen && <EditProfile setIsModalOpen={setIsModalOpen} />}
 				</div>
 			</main>
 		</div>

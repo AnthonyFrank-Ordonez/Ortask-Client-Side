@@ -1,4 +1,5 @@
 import { endOfWeek, isWithinInterval, startOfWeek } from 'date-fns';
+import { Area } from 'react-easy-crop';
 
 export const API_URLS = {
 	AUTH: '/api/check-auth',
@@ -7,6 +8,7 @@ export const API_URLS = {
 	REGISTER: '/api/users/register',
 	USERS: '/api/users',
 	TASKS: '/api/tasks',
+	PROFILE: '/api/profile',
 };
 
 export const WEEKDAYS = [
@@ -41,5 +43,42 @@ export const isThisWeek = (taskDate: Date) => {
 	return isWithinInterval(createdDate, {
 		start: startOfWeek(now, { weekStartsOn: 1 }),
 		end: endOfWeek(now, { weekStartsOn: 1 }),
+	});
+};
+
+export const getCroppedImage = (
+	imgSrc: string,
+	pixelCrop: Area
+): Promise<string> => {
+	return new Promise((resolve) => {
+		const image = new Image();
+		image.src = imgSrc;
+
+		image.onload = () => {
+			const canvas = document.createElement('canvas');
+			const ctx = canvas.getContext('2d');
+
+			if (!ctx) {
+				console.error('Could not get canvas context');
+				return;
+			}
+
+			canvas.width = pixelCrop.width;
+			canvas.height = pixelCrop.height;
+
+			ctx.drawImage(
+				image,
+				pixelCrop.x,
+				pixelCrop.y,
+				pixelCrop.width,
+				pixelCrop.height,
+				0,
+				0,
+				pixelCrop.width,
+				pixelCrop.height
+			);
+
+			resolve(canvas.toDataURL('image/jpeg', 0.85));
+		};
 	});
 };

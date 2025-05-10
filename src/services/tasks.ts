@@ -1,13 +1,9 @@
 import { API_URLS } from '@/utils';
 import { NewTask, TaskDataType, Tasks, UpdateTaskArg } from '@/types';
-import { ErrorResponse } from 'react-router-dom';
 import axiosInstance from './axiosInstance';
 
 const createTask = async (newTask: TaskDataType) => {
-	const response = await axiosInstance.post<NewTask | ErrorResponse>(
-		API_URLS.TASKS,
-		newTask
-	);
+	const response = await axiosInstance.post<NewTask>(API_URLS.TASKS, newTask);
 	return response.data;
 };
 
@@ -24,4 +20,11 @@ const updateTask = async (object: UpdateTaskArg) => {
 	return response.data;
 };
 
-export default { createTask, getTasks, updateTask };
+const deleteTask = async (taskId: string) => {
+	const response = await axiosInstance.delete<void>(
+		`${API_URLS.TASKS}/${taskId}`
+	);
+	return response.data;
+};
+
+export default { createTask, getTasks, updateTask, deleteTask };
