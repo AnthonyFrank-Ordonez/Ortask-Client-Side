@@ -93,7 +93,7 @@ otasks/
 ## Preview
 
 ### Login
-![alt text][https://github.com/AnthonyFrank-Ordonez/Ortask-Client-Side/blob/main/public/images/Login.png?raw=true]
+![Login](https://github.com/user-attachments/assets/99316042-4d48-47f3-b09e-06617f1b15c3)
 
 
 ## 📄 Licenses
