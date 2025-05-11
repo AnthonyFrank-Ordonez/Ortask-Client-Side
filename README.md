@@ -99,7 +99,8 @@ otasks/
 ![Register](https://github.com/user-attachments/assets/f715d8c9-6cd9-4f6c-961a-bd591fafff2c)
 
 ### Dashboard
-![Dashboard](https://github.com/user-attachments/assets/ae5b610a-3e0d-4511-966b-2834df90f3c9)
+![Dashboard](https://github.com/user-attachments/assets/fa3f2040-6276-42ac-963d-38338ad480fb)
+
 
 
 
