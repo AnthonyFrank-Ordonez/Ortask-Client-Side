@@ -91,11 +91,15 @@ otasks/
 - `npm run tsc` - Run typescript
 
 ## Preview
-```
+
 ### Login
 ![Login](https://github.com/user-attachments/assets/99316042-4d48-47f3-b09e-06617f1b15c3)
 
-```
+### Register
+![Register](https://github.com/user-attachments/assets/f715d8c9-6cd9-4f6c-961a-bd591fafff2c)
+
+### Dashboard
+![Dashboard](https://github.com/user-attachments/assets/ae5b610a-3e0d-4511-966b-2834df90f3c9)
 
 
 
