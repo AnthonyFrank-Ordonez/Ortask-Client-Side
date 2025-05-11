@@ -93,7 +93,7 @@ otasks/
 ## Preview
 
 ### Login
-<img src="images/Login.png" alt="Login Screenshot" width="500" />
+![alt text][https://github.com/AnthonyFrank-Ordonez/Ortask-Client-Side/blob/main/public/images/Login.png]
 
 
 ## 📄 Licenses
