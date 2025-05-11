@@ -89,8 +89,13 @@ function App() {
 
 				{/* Logo Area */}
 				<div className='p-6 border-b border-primary mb-5'>
-					<div className='h-12 bg-tertiary/10 rounded flex items-center justify-center'>
-						<span className='text-xl font-bold'>OrTasks</span>
+					<div className='h-12 rounded flex items-center justify-center space-x-1'>
+						<img
+							src='images/Ortask-Logo.png'
+							alt='ortasks logo'
+							className='w-12 h-12'
+						/>
+						<span className='text-2xl font-bold'>OrTasks</span>
 					</div>
 				</div>
 
