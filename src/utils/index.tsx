@@ -2,13 +2,13 @@ import { endOfWeek, isWithinInterval, startOfWeek } from 'date-fns';
 import { Area } from 'react-easy-crop';
 
 export const API_URLS = {
-	AUTH: '/api/check-auth',
-	LOGIN: '/api/login',
-	LOGOUT: '/api/users/logout',
-	REGISTER: '/api/users/register',
-	USERS: '/api/users',
-	TASKS: '/api/tasks',
-	PROFILE: '/api/profile',
+	AUTH: 'https://ortaskbe.afordonez.com/api/check-auth',
+	LOGIN: 'https://ortaskbe.afordonez.com/api/login',
+	LOGOUT: 'https://ortaskbe.afordonez.com/api/users/logout',
+	REGISTER: 'https://ortaskbe.afordonez.com/api/users/register',
+	USERS: 'https://ortaskbe.afordonez.com/api/users',
+	TASKS: 'https://ortaskbe.afordonez.com/api/tasks',
+	PROFILE: 'https://ortaskbe.afordonez.com/api/profile',
 };
 
 export const WEEKDAYS = [
