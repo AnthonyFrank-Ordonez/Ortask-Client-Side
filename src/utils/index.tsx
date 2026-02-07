@@ -1,14 +1,16 @@
 import { endOfWeek, isWithinInterval, startOfWeek } from 'date-fns';
 import { Area } from 'react-easy-crop';
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 export const API_URLS = {
-	AUTH: 'https://ortaskbe.afordonez.com/api/check-auth',
-	LOGIN: 'https://ortaskbe.afordonez.com/api/login',
-	LOGOUT: 'https://ortaskbe.afordonez.com/api/users/logout',
-	REGISTER: 'https://ortaskbe.afordonez.com/api/users/register',
-	USERS: 'https://ortaskbe.afordonez.com/api/users',
-	TASKS: 'https://ortaskbe.afordonez.com/api/tasks',
-	PROFILE: 'https://ortaskbe.afordonez.com/api/profile',
+	AUTH: `${BASE_URL}/api/check-auth`,
+	LOGIN: `${BASE_URL}/api/login`,
+	LOGOUT: `${BASE_URL}/api/users/logout`,
+	REGISTER: `${BASE_URL}/api/users/register`,
+	USERS: `${BASE_URL}/api/users`,
+	TASKS: `${BASE_URL}/api/tasks`,
+	PROFILE: `${BASE_URL}/api/profile`,
 };
 
 export const WEEKDAYS = [
